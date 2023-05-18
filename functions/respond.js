@@ -19,12 +19,8 @@ exports.handler = async function(context, event, callback) {
         JSON.parse(decodeURIComponent(cookieValue)) :
         null;
 
-    // Get the user's voice input from the event
-    let voiceInput = event.SpeechResult;
-
     // Create a conversation variable to store the dialog and the user's input to the conversation history
     const conversation = cookieData?.conversation || [];
-    conversation.push(`user: ${voiceInput}`);
 
     // Get the AI's response based on the conversation history
     const aiResponse = await generateAIResponse(conversation.join(";"));
@@ -35,11 +31,13 @@ exports.handler = async function(context, event, callback) {
     // Add the AI's response to the conversation history
     conversation.push(`assistant: ${aiResponse}`);
 
+
     // Limit the conversation history to the last 10 messages; you can increase this if you want but keeping things short for this demonstration improves performance
     while (conversation.length > 10) {
         conversation.shift();
     }
 
+    
     // Generate some <Say> TwiML using the cleaned up AI response
     twiml.say({
             voice: "Polly.Olivia-Neural",

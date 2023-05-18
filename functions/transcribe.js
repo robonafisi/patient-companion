@@ -12,13 +12,27 @@ exports.handler = function(context, event, callback) {
         );
     }
 
-    // Listen to the user's speech and pass the input to the /respond Function
+
+    // Listen to the user's speech and pass the input to the /ack Function
     twiml.gather({
         speechTimeout: 'auto', // Automatically determine the end of user speech
         speechModel: 'experimental_conversations', // Use the conversation-based speech recognition model
         input: 'speech', // Specify speech as the input type
-        action: '/respond', // Send the collected input to /respond
+        action: '/ack', // Send the collected input to /ack
     });
+
+    twiml.say({
+    voice: "Polly.Olivia-Neural",
+    },"Are you still there?");
+
+    twiml.pause({ length: 5 });
+
+    twiml.gather({
+        speechTimeout: 'auto', // Set the timeout to 5 seconds (adjust as needed)
+        speechModel: 'experimental_conversations', // Use the conversation-based speech recognition model
+        input: 'speech', // Specify speech as the input type
+        action: '/ack', // Send the collected input to /ack
+      });
 
     // Create a Twilio Response object
     const response = new Twilio.Response();
